@@ -5,12 +5,15 @@
 ## 目录
 - [系统管理](#系统管理)
 - [软件包管理](#软件包管理)
+- [Conda 环境管理](#conda-环境管理)
 - [文件和目录操作](#文件和目录操作)
 - [文件权限管理](#文件权限管理)
 - [进程管理](#进程管理)
 - [网络操作](#网络操作)
 - [文本处理](#文本处理)
 - [系统信息](#系统信息)
+- [系统更新与维护](#系统更新与维护)
+- [WSL 特定操作](#wsl-特定操作)
 - [常用技巧](#常用技巧)
 
 ---
@@ -134,6 +137,172 @@ dpkg -l | grep <软件名>
 # 查看软件安装位置
 whereis <软件名>
 which <软件名>
+```
+
+### 系统更新
+
+```bash
+# 更新软件包列表
+sudo apt update
+
+# 查看可升级的包
+apt list --upgradable
+
+# 升级所有包（推荐）
+sudo apt upgrade
+
+# 完整升级（包括内核，谨慎使用）
+sudo apt full-upgrade
+
+# 自动清理（移除不再需要的包）
+sudo apt autoremove
+sudo apt autoclean
+```
+
+---
+
+## Conda 环境管理
+
+### 环境列表与信息
+
+```bash
+# 查看所有环境
+conda env list
+conda info --envs
+
+# 查看当前环境信息
+conda info
+
+# 查看当前环境的 Python 版本
+python --version
+
+# 查看当前环境安装的包
+conda list
+pip list
+```
+
+### 创建和删除环境
+
+```bash
+# 创建新环境（指定 Python 版本）
+conda create -n env_name python=3.10
+
+# 创建环境并安装包
+conda create -n env_name python=3.10 numpy pandas
+
+# 从 environment.yml 创建环境
+conda env create -f environment.yml
+
+# 克隆现有环境
+conda create --name new_env --clone old_env
+
+# 删除环境
+conda env remove -n env_name
+conda remove --name env_name --all
+```
+
+### 激活和退出环境
+
+```bash
+# 激活环境
+conda activate env_name
+
+# 退出当前环境
+conda deactivate
+
+# 激活 base 环境
+conda activate base
+```
+
+### 包管理
+
+```bash
+# 安装包（conda）
+conda install package_name
+conda install numpy pandas matplotlib
+
+# 安装包（pip，在 conda 环境中）
+pip install package_name
+
+# 安装指定版本
+conda install package_name=1.2.3
+
+# 从特定 channel 安装
+conda install -c conda-forge package_name
+
+# 更新包
+conda update package_name
+conda update --all  # 更新所有包
+
+# 卸载包
+conda remove package_name
+pip uninstall package_name
+
+# 搜索包
+conda search package_name
+```
+
+### 导出和共享环境
+
+```bash
+# 导出当前环境到 environment.yml
+conda env export > environment.yml
+
+# 导出为 requirements.txt（pip 格式）
+pip freeze > requirements.txt
+
+# 导出为 conda 格式（只包含 conda 安装的包）
+conda env export --from-history > environment.yml
+
+# 从 requirements.txt 安装
+pip install -r requirements.txt
+```
+
+### 环境清理
+
+```bash
+# 清理 conda 缓存
+conda clean --all
+
+# 清理 pip 缓存
+pip cache purge
+
+# 查看环境占用空间
+du -sh ~/miniconda3/envs/*
+du -sh ~/anaconda3/envs/*
+```
+
+### 常见问题处理
+
+```bash
+# 修复损坏的环境
+conda update --all
+
+# 重新安装 conda
+conda install -n base conda
+
+# 查看 conda 配置
+conda config --show
+
+# 添加 conda-forge channel
+conda config --add channels conda-forge
+
+# 设置 channel 优先级
+conda config --set channel_priority strict
+```
+
+### 实用脚本示例
+
+```bash
+# 快速切换环境的别名（添加到 ~/.bashrc）
+alias conda-vllm='conda activate vllm'
+alias conda-base='conda activate base'
+
+# 查看所有环境的 Python 版本
+for env in $(conda env list | grep -v '^#' | awk '{print $1}'); do
+    echo "=== $env ==="
+    conda run -n $env python --version
+done
 ```
 
 ---
@@ -426,7 +595,7 @@ sort file.txt | uniq  # 先排序再去重
 
 # 替换文本
 sed 's/old/new/' file.txt  # 替换每行第一个
-se 's/old/new/g' file.txt  # 替换所有
+sed 's/old/new/g' file.txt  # 替换所有
 sed -i 's/old/new/g' file.txt  # 直接修改文件
 
 # 提取列
@@ -473,6 +642,318 @@ cat /proc/cpuinfo
 # 查看系统负载
 uptime
 top
+```
+
+---
+
+## 系统更新与维护
+
+### 系统更新
+
+```bash
+# 更新软件包列表
+sudo apt update
+
+# 查看可升级的包
+apt list --upgradable
+
+# 升级所有包
+sudo apt upgrade
+
+# 完整升级（包括内核）
+sudo apt full-upgrade
+
+# 自动清理
+sudo apt autoremove  # 移除不再需要的包
+sudo apt autoclean   # 清理下载缓存
+```
+
+### 系统维护
+
+```bash
+# 查看系统日志
+journalctl -xe  # 查看系统错误日志
+journalctl -u service_name  # 查看特定服务日志
+
+# 清理系统日志（释放空间）
+sudo journalctl --vacuum-time=7d  # 只保留 7 天日志
+sudo journalctl --vacuum-size=500M  # 限制日志大小为 500MB
+
+# 清理临时文件
+sudo rm -rf /tmp/*
+sudo rm -rf /var/tmp/*
+
+# 清理 APT 缓存
+sudo apt clean
+sudo apt autoclean
+
+# 查找大文件
+find / -type f -size +100M 2>/dev/null
+du -h --max-depth=1 / | sort -rh | head -20
+```
+
+### 磁盘空间管理
+
+```bash
+# 查看磁盘使用情况
+df -h
+
+# 查看目录大小
+du -sh /home/*
+du -h --max-depth=1 /home
+
+# 查找占用空间最大的目录
+du -h / | sort -rh | head -20
+
+# 清理 conda 缓存（如果使用 conda）
+conda clean --all
+
+# 清理 pip 缓存
+pip cache purge
+
+# 清理 Docker（如果使用）
+docker system prune -a
+```
+
+### 系统监控
+
+```bash
+# 实时监控系统资源
+htop  # 需要安装：sudo apt install htop
+
+# 查看系统负载
+uptime
+
+# 查看内存使用
+free -h
+
+# 查看 CPU 信息
+lscpu
+
+# 查看磁盘 I/O
+iostat -x 1  # 需要安装：sudo apt install sysstat
+
+# 查看网络流量
+iftop  # 需要安装：sudo apt install iftop
+```
+
+---
+
+## WSL 特定操作
+
+### WSL 基本信息
+
+```bash
+# 查看 WSL 版本
+wsl --version  # 在 Windows PowerShell 中执行
+
+# 查看 WSL 发行版
+wsl --list --verbose  # 在 Windows PowerShell 中执行
+
+# 查看当前 WSL 发行版
+cat /etc/os-release
+
+# 查看 WSL IP 地址
+hostname -I
+ip addr show eth0
+```
+
+### WSL 与 Windows 文件系统互访
+
+```bash
+# 在 WSL 中访问 Windows 文件
+cd /mnt/c/Users/YourName  # 访问 C 盘用户目录
+cd /mnt/d/Projects       # 访问 D 盘项目目录
+
+# 在 Windows 中访问 WSL 文件
+# 路径格式：\\wsl$\Ubuntu\home\username
+# 或在文件资源管理器地址栏输入：\\wsl$\Ubuntu
+```
+
+### WSL 网络配置
+
+```bash
+# 查看 WSL IP 地址
+ip addr show eth0
+hostname -I
+
+# 查看网络接口
+ip link show
+
+# 测试网络连接
+ping 8.8.8.8
+ping google.com
+```
+
+### SSH 服务器配置（用于远程连接）
+
+#### 1. 安装和启动 SSH 服务
+
+```bash
+# 更新软件包
+sudo apt update
+
+# 安装 SSH 服务器
+sudo apt install -y openssh-server
+
+# 启动 SSH 服务
+sudo service ssh start
+
+# 设置开机自启（WSL 中可能不适用，需要手动启动）
+sudo systemctl enable ssh
+```
+
+#### 2. 配置 SSH
+
+```bash
+# 编辑 SSH 配置
+sudo nano /etc/ssh/sshd_config
+
+# 重要配置项：
+# Port 22                    # SSH 端口
+# PermitRootLogin yes        # 允许 root 登录（根据需要）
+# PasswordAuthentication yes # 允许密码认证
+# PubkeyAuthentication yes   # 允许密钥认证
+
+# 重启 SSH 服务
+sudo service ssh restart
+```
+
+#### 3. 检查 SSH 服务状态
+
+```bash
+# 查看 SSH 服务状态
+sudo service ssh status
+
+# 查看 SSH 端口监听
+ss -lntp | grep ssh
+sudo netstat -tulpn | grep ssh
+
+# 测试 SSH 连接（本地）
+ssh localhost
+```
+
+#### 4. Windows 端口转发配置
+
+在 **管理员 PowerShell** 中执行：
+
+```powershell
+# 获取 WSL IP 地址
+wsl hostname -I
+
+# 设置端口转发（将 Windows 2222 端口转发到 WSL 22 端口）
+netsh interface portproxy add v4tov4 `
+    listenaddress=0.0.0.0 `
+    listenport=2222 `
+    connectaddress=<WSL_IP> `
+    connectport=22
+
+# 查看端口转发规则
+netsh interface portproxy show all
+
+# 删除端口转发规则
+netsh interface portproxy delete v4tov4 listenaddress=0.0.0.0 listenport=2222
+
+# 重置所有端口转发
+netsh interface portproxy reset
+```
+
+#### 5. Windows 防火墙配置
+
+在 **管理员 PowerShell** 中执行：
+
+```powershell
+# 添加防火墙规则（允许 SSH 端口）
+New-NetFirewallRule `
+    -DisplayName "WSL SSH 2222" `
+    -Direction Inbound `
+    -Protocol TCP `
+    -LocalPort 2222 `
+    -Action Allow
+
+# 查看防火墙规则
+Get-NetFirewallRule | Where-Object {$_.DisplayName -like "*WSL*"}
+
+# 删除防火墙规则
+Remove-NetFirewallRule -DisplayName "WSL SSH 2222"
+```
+
+#### 6. 每次开机自动设置端口转发
+
+**方法一：手动快速设置（推荐）**
+
+每次开机后，在管理员 PowerShell 执行：
+
+```powershell
+# 获取 WSL IP
+$wslIp = (wsl hostname -I).Trim()
+
+# 重置并添加端口转发
+netsh interface portproxy reset
+netsh interface portproxy add v4tov4 `
+    listenaddress=0.0.0.0 `
+    listenport=2222 `
+    connectaddress=$wslIp `
+    connectport=22
+```
+
+**方法二：创建启动脚本**
+
+1. 创建 PowerShell 脚本 `setup-wsl-ssh.ps1`：
+
+```powershell
+# 获取 WSL IP
+$wslIp = (wsl hostname -I).Trim()
+Write-Host "WSL IP: $wslIp"
+
+# 重置端口转发
+netsh interface portproxy reset
+
+# 添加新的端口转发
+netsh interface portproxy add v4tov4 `
+    listenaddress=0.0.0.0 `
+    listenport=2222 `
+    connectaddress=$wslIp `
+    connectport=22
+
+Write-Host "Port forwarding configured: Windows:2222 -> WSL:$wslIp:22"
+```
+
+2. 将脚本添加到 Windows 任务计划程序，设置开机自动运行。
+
+#### 7. 测试 SSH 连接
+
+```bash
+# 在 Windows PowerShell 中测试
+ssh root@127.0.0.1 -p 2222
+
+# 或在其他电脑上测试（使用 Windows 主机 IP）
+ssh root@<Windows_IP> -p 2222
+```
+
+### WSL 性能优化
+
+```bash
+# 优化 WSL 2 性能（在 Windows 中创建 .wslconfig）
+# 文件位置：C:\Users\YourName\.wslconfig
+# 内容示例：
+# [wsl2]
+# memory=8GB
+# processors=4
+# swap=2GB
+# localhostForwarding=true
+```
+
+### WSL 常用命令
+
+```bash
+# 在 WSL 中执行 Windows 命令
+cmd.exe /c dir  # 执行 Windows dir 命令
+powershell.exe -Command "Get-Date"  # 执行 PowerShell 命令
+
+# 在 Windows 中执行 WSL 命令
+wsl ls -la  # 在 PowerShell 中执行
+wsl python script.py
 ```
 
 ---
@@ -637,6 +1118,10 @@ sudo systemctl enable docker
 4. **使用版本控制**：Git 管理代码
 5. **注意权限**：谨慎使用 `sudo` 和 `rm -rf`
 6. **查看帮助**：`man <命令>` 或 `<命令> --help`
+7. **定期更新系统**：`sudo apt update && sudo apt upgrade`
+8. **清理无用文件**：定期运行 `sudo apt autoremove` 和 `conda clean --all`
+9. **使用环境管理**：为不同项目创建独立的 conda 环境
+10. **记录重要操作**：将常用命令添加到 `~/.bashrc` 作为别名
 
 ---
 
@@ -649,4 +1134,149 @@ sudo systemctl enable docker
 
 ---
 
-**最后更新**: 2025-10-16
+## 实用脚本集合
+
+### 快速系统检查脚本
+
+```bash
+#!/bin/bash
+# 保存为 check_system.sh
+
+echo "=== 系统信息 ==="
+echo "主机名: $(hostname)"
+echo "用户: $(whoami)"
+echo "系统版本: $(lsb_release -d | cut -f2)"
+echo "内核版本: $(uname -r)"
+echo ""
+
+echo "=== 磁盘使用 ==="
+df -h | grep -E '^/dev|Filesystem'
+echo ""
+
+echo "=== 内存使用 ==="
+free -h
+echo ""
+
+echo "=== CPU 负载 ==="
+uptime
+echo ""
+
+echo "=== Conda 环境 ==="
+if command -v conda &> /dev/null; then
+    conda env list
+else
+    echo "Conda 未安装"
+fi
+echo ""
+
+echo "=== 网络 IP ==="
+hostname -I
+```
+
+使用方法：
+```bash
+chmod +x check_system.sh
+./check_system.sh
+```
+
+### 清理脚本
+
+```bash
+#!/bin/bash
+# 保存为 cleanup.sh
+
+echo "开始清理系统..."
+
+# 清理 APT 缓存
+sudo apt autoremove -y
+sudo apt autoclean
+
+# 清理 conda 缓存
+if command -v conda &> /dev/null; then
+    conda clean --all -y
+fi
+
+# 清理 pip 缓存
+if command -v pip &> /dev/null; then
+    pip cache purge
+fi
+
+# 清理临时文件
+sudo rm -rf /tmp/*
+sudo rm -rf /var/tmp/*
+
+# 清理系统日志（保留 7 天）
+sudo journalctl --vacuum-time=7d
+
+echo "清理完成！"
+```
+
+### 环境导出脚本
+
+```bash
+#!/bin/bash
+# 保存为 export_envs.sh
+
+BACKUP_DIR="$HOME/conda_env_backups"
+mkdir -p "$BACKUP_DIR"
+
+if ! command -v conda &> /dev/null; then
+    echo "错误: Conda 未安装"
+    exit 1
+fi
+
+for env in $(conda env list | grep -v '^#' | awk '{print $1}' | grep -v 'base'); do
+    echo "导出环境: $env"
+    conda env export -n "$env" > "$BACKUP_DIR/${env}.yml" 2>/dev/null
+    conda run -n "$env" pip freeze > "$BACKUP_DIR/${env}_pip.txt" 2>/dev/null
+done
+
+echo "所有环境已导出到: $BACKUP_DIR"
+```
+
+### WSL SSH 快速设置脚本（PowerShell）
+
+```powershell
+# 保存为 setup-wsl-ssh.ps1
+# 在管理员 PowerShell 中运行
+
+Write-Host "正在获取 WSL IP 地址..." -ForegroundColor Yellow
+$wslIp = (wsl hostname -I).Trim()
+
+if ([string]::IsNullOrEmpty($wslIp)) {
+    Write-Host "错误: 无法获取 WSL IP 地址" -ForegroundColor Red
+    exit 1
+}
+
+Write-Host "WSL IP: $wslIp" -ForegroundColor Green
+
+Write-Host "重置端口转发..." -ForegroundColor Yellow
+netsh interface portproxy reset
+
+Write-Host "添加端口转发规则..." -ForegroundColor Yellow
+netsh interface portproxy add v4tov4 `
+    listenaddress=0.0.0.0 `
+    listenport=2222 `
+    connectaddress=$wslIp `
+    connectport=22
+
+Write-Host "检查防火墙规则..." -ForegroundColor Yellow
+$firewallRule = Get-NetFirewallRule -DisplayName "WSL SSH 2222" -ErrorAction SilentlyContinue
+
+if (-not $firewallRule) {
+    Write-Host "添加防火墙规则..." -ForegroundColor Yellow
+    New-NetFirewallRule `
+        -DisplayName "WSL SSH 2222" `
+        -Direction Inbound `
+        -Protocol TCP `
+        -LocalPort 2222 `
+        -Action Allow | Out-Null
+}
+
+Write-Host "`n✅ 配置完成！" -ForegroundColor Green
+Write-Host "SSH 连接命令: ssh root@127.0.0.1 -p 2222" -ForegroundColor Cyan
+```
+
+---
+
+**最后更新**: 2025-12-15

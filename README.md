@@ -57,6 +57,11 @@
   - Conda 环境创建
   - vLLM 安装与测试
   - Hugging Face 代理配置
+- **[向量数据库常见问题排查](./vector_database_troubleshooting.md)**
+  - SQLite 文件锁定问题解决
+  - 数据库连接管理最佳实践
+  - 多进程访问处理方案
+  - 故障诊断与预防措施
 - **[AI 大模型应用开发学习计划](./笔记.md)**
   - 16 周完整学习路线
   - FastAPI + RAG + Agent 技术栈
