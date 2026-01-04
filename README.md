@@ -212,8 +212,6 @@ graph TB
 2. 右键选择 "Markdown PDF: Export (pdf)"
 3. 即可生成 PDF 文档
 
-### 全文搜索
-在文件夹中按 `Ctrl+Shift+F` 进行全局搜索，快速找到需要的命令或概念。
 
 ---
 
@@ -229,13 +227,7 @@ git clone <repository-url>
 code /path/to/technical_notes
 ```
 
----
 
-## 📧 联系方式
-
-如有问题或建议，欢迎联系：
-- 📧 Email: your.email@example.com （可根据个人情况替换）
-- 🐙 GitHub: [@yourusername](https://github.com/yourusername)
 
 ---
 
