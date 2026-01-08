@@ -53,7 +53,8 @@ git init
 | 添加文件 | `git add .` | 添加所有文件到暂存区 |
 | 提交文件 | `git commit -m "提交说明"` | 提交暂存区内容到本地仓库 |
 | 查看提交日志 | `git log` | 查看历史提交记录 |
-| 撤销更改 | `git checkout -- <文件名>` | 恢复到上次提交状态 |
+| 撤销更改 | `git restore <文件名>` | 恢复到上次提交状态（推荐） |
+| | `git checkout -- <文件名>` | 旧方式，仍可用 |
 
 ---
 
@@ -94,26 +95,32 @@ git pull origin main   # 拉取远程更新
 
 ## 8. 分支管理
 
-| 操作 | 命令 |
-|------|------|
-| 查看分支 | `git branch` |
-| 创建分支 | `git branch 分支名` |
-| 切换分支 | `git checkout 分支名` |
-| 创建并切换 | `git checkout -b 分支名` |
-| 合并分支 | `git merge 分支名` |
-| 删除分支 | `git branch -d 分支名` |
+| 操作 | 命令 | 说明 |
+|------|------|------|
+| 查看分支 | `git branch` | 查看所有本地分支 |
+| 创建分支 | `git branch 分支名` | 创建新分支（不切换） |
+| 切换分支 | `git switch 分支名` | 切换到指定分支（推荐） |
+| 创建并切换 | `git switch -c 分支名` | 创建并切换到新分支（推荐） |
+| 合并分支 | `git merge 分支名` | 将指定分支合并到当前分支 |
+| 删除分支 | `git branch -d 分支名` | 删除已合并的分支 |
+| 强制删除分支 | `git branch -D 分支名` | 强制删除分支（未合并） |
+
+> **💡 提示**：`git switch` 是 Git 2.23+ 引入的新命令，专门用于切换分支，比 `git checkout` 更清晰。  
+> 旧方式仍可用：`git checkout 分支名` 和 `git checkout -b 分支名`
 
 ---
 
 ## 9. 撤销与回退
 | 操作 | 命令 |
 |------|------|
-| 撤销文件修改 | `git checkout -- 文件名` |
+| 撤销文件修改 | `git restore 文件名` | 或 `git checkout -- 文件名`（旧方式） |
 | 撤销暂存区修改 | `git reset 文件名` |
 | 回退到上一个版本 | `git reset --hard HEAD^` |
 | 回退到指定提交 | `git reset --hard <commit_id>` |
 
 ---
+
+## 10. 添加忽略
 
 ## 10. 常用工作流（完整流程）
 ```bash
@@ -151,7 +158,7 @@ git push -u origin main
 | 推送 | `git push -u origin main` |
 | 拉取 | `git pull` |
 | 查看状态 | `git status` |
-| 创建分支 | `git checkout -b newbranch` |
+| 创建分支 | `git switch -c newbranch` |
 | 合并分支 | `git merge newbranch` |
 | 查看日志 | `git log --oneline --graph` |
 

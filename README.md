@@ -33,6 +33,13 @@
   - 进程和服务管理
   - 实用技巧汇总
 
+- **[Docker 使用指南](./docker.md)**
+  - 镜像与容器管理
+  - 网络和数据卷操作
+  - Docker Compose 使用
+  - 常用场景与故障排查
+  - 完整命令速查表
+
 ### 🐍 Python 与开发工具
 - **[UV 使用指南](./uv.md)**
   - 极速 Python 包管理器
@@ -96,6 +103,7 @@ graph TB
     
     C --> C1[PowerShell]
     C --> C2[Ubuntu/Linux]
+    C --> C3[Docker]
     
     D --> D1[UV - Python 包管理]
     D --> D2[Git]
@@ -131,6 +139,11 @@ graph TB
 2. **创建项目和虚拟环境**
 3. **管理依赖包**
 
+### 容器化部署
+1. **安装 Docker** - [查看文档](./docker.md)
+2. **学习基本命令和操作**
+3. **使用 Docker Compose 管理多容器应用**
+
 ---
 
 ## 📝 使用建议
@@ -153,6 +166,11 @@ graph TB
 ---
 
 ## 🔄 更新日志
+
+### 2025-12-15
+- ✨ 新增 Docker 使用指南，包含完整命令和最佳实践
+- ✨ 完善 Git 文档，更新为使用 `git switch` 和 `git restore`
+- ✨ 完善 Ubuntu 文档，新增 Conda 环境管理和 WSL 配置
 
 ### 2025-11-13
 - 📚 README 导航结构扩充，补充 Git、GitHub、Cursor、vLLM 等文档链接
@@ -186,6 +204,8 @@ graph TB
 - [PowerShell 文档](https://learn.microsoft.com/zh-cn/powershell/)
 - [Ubuntu 文档](https://ubuntu.com/server/docs)
 - [UV 官方文档](https://docs.astral.sh/uv/)
+- [Docker 官方文档](https://docs.docker.com/)
+- [Docker 官方文档](https://docs.docker.com/)
 
 ### 学习网站
 - [菜鸟教程](https://www.runoob.com/)
