@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>我的第一个 JS App</title>
+    <style>
+        body { 
+            font-family: sans-serif; 
+            text-align: center; 
+            margin-top: 50px; 
+        }
+        h1 { font-size: 50px; color: #333; }
+        button {
+            padding: 10px 20px;
+            font-size: 20px;
+            cursor: pointer;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>网页计数器</h2>
+    
+    <h1 id="score-board">0</h1>
+
+    <button id="btn-add">加 1</button>
+    <button id="btn-sub">减 1</button>
+
+    <script>
+        // --- 第一步：把 HTML 里的元素“抓”到 JS 里 ---
+        // document.getElementById('id名') 是最常用的抓取方法
+        const display = document.getElementById('score-board');
+        const addBtn = document.getElementById('btn-add');
+        const subBtn = document.getElementById('btn-sub');
+
+        // --- 第二步：定义我们的数据 ---
+        let count = 0;
+
+        // --- 第三步：监听点击事件 ---
+        
+        // 这里的逻辑是：当 addBtn 被 'click' (点击) 时，执行后面的函数
+        addBtn.addEventListener('click', function() {
+            // 1. 修改数据
+            count = count + 1;
+            
+            // 2. 更新网页显示 (innerText 是修改标签里的文字)
+            display.innerText = count;
+            
+            console.log("现在数字是:", count); // 你依然可以在控制台看到这个
+        });
+
+        // 减法按钮的逻辑
+        subBtn.addEventListener('click', function() {
+            count = count - 1;
+            display.innerText = count;
+        });
+
+    </script>
+</body>
+</html>

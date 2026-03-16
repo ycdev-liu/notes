@@ -756,7 +756,7 @@ docker system prune -a --volumes
 |------|------|
 | 搜索镜像 | `docker search <镜像名>` |
 | 拉取镜像 | `docker pull <镜像名>` |
-| 查看镜像 | `docker images` |
+| 查看镜像 | `docker imadockeges` |
 | 删除镜像 | `docker rmi <镜像名>` |
 | 构建镜像 | `docker build -t <镜像名> .` |
 | 导出镜像 | `docker save -o <文件.tar> <镜像名>` |

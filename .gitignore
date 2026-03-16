@@ -1,3 +1,11 @@
+# 忽略 study_ Miluvs 目录（注意空格）
+study_ Miluvs/
+
+# 或者使用通配符匹配
+study_*Miluvs/
 
 
-study_Miluvs
+
+node_modules/
+
+useofpython/mysql_data/

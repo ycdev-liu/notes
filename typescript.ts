@@ -157,9 +157,6 @@ class Article {
     static  readonly author :string ="liu"
     private static reference :string
 
-
-
-
     constructor(title:string ,content :string)
     {
         this.title =title
@@ -198,7 +195,6 @@ class User{
 const u = new User()
 
 // 抽象类
-
 abstract class Animal{
     abstract name:string
     abstract maskSound():void
@@ -211,7 +207,6 @@ abstract class Animal{
 class Cat extends Animal{
     name: string ="cat"
     maskSound(): void {
-        
     }
 }
 
