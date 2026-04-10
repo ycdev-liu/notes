@@ -57,11 +57,43 @@ su - username
 
 # 以 root 身份执行命令
 sudo <命令>
+
+# ubuntu 默认情况下root用户是锁定的，通常不能直接用roo用户登陆
+# 通常有两种方式获得 root 权限：使用 sudo 或启用 root 用户
+sudo -i
+sudo 命令
+sudo apt update
+
+
+# 修改密码
+sudo passwd 用户名
+
+
+# 第二种不推荐
+
+# ubuntu 组的概念
+
+#在 Linux 系统里，每个用户都有一个用户名和一个 UID（用户 ID），同时用户可以属于一个或多个 组（Group），组是用来 管理权限和访问控制的集合。
+#可以把它想象成：
+# 用户 = 一个具体的人
+# 组 = 一群人共享某种权限或资源
+
+# sudo组 adm组 默认自己的组
 ```
+
+
 
 ### 服务管理 (systemctl)
 
 ```bash
+
+
+# 列出所有服务
+systemctl list-units --type=service
+
+#或者只看正在运行的服务：
+
+systemctl list-units --type=service --state=running
 # 查看服务状态
 sudo systemctl status <服务名>
 
@@ -332,6 +364,53 @@ ls -lh  # 人类可读的文件大小
 ls -lrt  # 按时间排序
 ```
 
+### 创建软硬链接
+
+
+
+软链接（Symbolic Link / Soft Link）（可以方便python直接引用）
+**最常用**，类似于 Windows 的“快捷方式”。它指向的是目标文件的路径。
+
+* **特点**：
+    * 可以跨文件系统（跨磁盘分区）。
+    * 可以为**目录**创建链接。
+    * 如果原始文件被删除，链接将失效（变成“死链接”）。
+
+* **语法**：
+    ```bash
+    ln -s [源文件或目录的绝对路径] [链接文件的名称]
+    ```
+
+* **示例**：
+    ```bash
+    # 为文件创建软链接
+    ln -s /home/user/data.txt  ~/Desktop/data_link
+
+    # 为文件夹创建软链接
+    ln -s /var/www/html  ~/my_web_folder
+    ```
+
+
+硬链接（Hard Link）
+硬链接是指向文件在磁盘上的物理索引（Inode）。
+
+* **特点**：
+    * 不支持跨文件系统（必须在同一分区）。
+    * **不能**为目录创建硬链接。
+    * 即使删除了原始文件，只要硬链接还在，文件内容就不会丢失。
+
+* **语法**：
+    ```bash
+    ln [源文件路径] [链接文件名称]
+    ```
+
+* **示例**：
+    ```bash
+    ln /home/user/script.sh  ~/script_backup
+    ```
+
+
+
 ### 目录操作
 
 ```bash
@@ -381,7 +460,7 @@ less file.txt  # 分页查看
 more file.txt  # 分页查看
 
 # 编辑文件
-nano file.txt  # 简单编辑器
+nano file.txt  # 简单编辑器 # 操作简单，下方有命令介绍
 vim file.txt  # Vim 编辑器
 ```
 
@@ -557,7 +636,34 @@ curl -X GET https://api.example.com/data
 curl -X POST -H "Content-Type: application/json" -d '{"key":"value"}' https://api.example.com/data
 ```
 
----
+### 设置网络代理
+
+
+窗口设置环境变量
+```
+export http_proxy="http://127.0.0.1:7890"
+export https_proxy="http://127.0.0.1:7890"
+```
+### 设置全局环境变量
+
+打开配置文件
+```
+nano ~/.bashrc
+```
+最后加上
+```
+export http_proxy="http://127.0.0.1:7890"
+export https_proxy="http://127.0.0.1:7890"
+```
+
+配置生效
+```
+source ~/.bashrc
+```
+验证
+```
+curl ifconfig.me
+```
 
 ## 文本处理
 
@@ -1060,6 +1166,57 @@ echo 'export MY_VAR="value"' >> ~/.bashrc
 source ~/.bashrc
 ```
 
+### 7. 关闭终端继续跑
+```
+nohup + &
+```
+例子
+```
+nohup ./script.sh &
+```
+自定义输出路径
+```
+nohup ./script.sh > my_logs.txt 2>&1 &
+
+```
+my_logs.txt：将标准输出（stdout）重定向到该文件。
+
+2>&1：将标准错误（stderr）也重定向到标准输出（即同一个文件）。
+
+&：放入后台。
+
+查看进程
+```
+ps -ef| grep script.sh
+```
+停止进程
+```
+kill -9 <PID>
+```
+
+### 8. tmux
+
+基本使用
+```
+# 创建会话
+tmux new -s 会话名
+# 查看所有会话
+tmux ls
+
+# 进入某个会话
+tumx attach -t 会话名
+
+# 杀死会话
+
+tumx kiss-session -t 会话名
+
+# 进入会话杀死会话,进入执行以下命令
+exit
+
+
+
+```
+
 ---
 
 ## 快捷键
@@ -1279,4 +1436,3 @@ Write-Host "SSH 连接命令: ssh root@127.0.0.1 -p 2222" -ForegroundColor Cyan
 
 ---
 
-**最后更新**: 2025-12-15
