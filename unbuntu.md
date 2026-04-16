@@ -849,6 +849,10 @@ iftop  # 需要安装：sudo apt install iftop
 
 ### WSL 基本信息
 
+镜像下载
+https://cloud-images.ubuntu.com/jammy/20260218/
+import 安装
+
 ```bash
 # 查看 WSL 版本
 wsl --version  # 在 Windows PowerShell 中执行
